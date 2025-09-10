@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Game Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center min-h-screen">
+
+  <h1 class="text-4xl font-bold my-6">🧠 Brain Game Hub</h1>
+
+  <!-- Menu -->
+  <div id="menu" class="grid grid-cols-2 gap-6 mb-8">
+    <button onclick="showGame('memory')" class="px-6 py-4 bg-blue-500 rounded-xl hover:bg-blue-600">🃏 Memory</button>
+    <button onclick="showGame('math')" class="px-6 py-4 bg-green-500 rounded-xl hover:bg-green-600">🧮 Math Quiz</button>
+    <button onclick="showGame('reaction')" class="px-6 py-4 bg-red-500 rounded-xl hover:bg-red-600">⚡ Reaction</button>
+    <button onclick="showGame('scramble')" class="px-6 py-4 bg-yellow-500 rounded-xl hover:bg-yellow-600">🔤 Scramble</button>
+    <button onclick="showGame('sequence')" class="px-6 py-4 bg-purple-500 rounded-xl hover:bg-purple-600">🔢 Sequence</button>
+    <button onclick="showGame('odd')" class="px-6 py-4 bg-pink-500 rounded-xl hover:bg-pink-600">👀 Odd One</button>
+    <button onclick="showGame('typing')" class="px-6 py-4 bg-indigo-500 rounded-xl hover:bg-indigo-600">⌨️ Typing</button>
+    <button onclick="showGame('pattern')" class="px-6 py-4 bg-orange-500 rounded-xl hover:bg-orange-600">🎨 Pattern</button>
+  </div>
+
+  <!-- Games Container -->
+  <div id="games" class="w-full flex flex-col items-center">
+
+    <!-- Memory Game -->
+    <div id="memory" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">🃏 Memory Game</h2>
+      <div id="memory-board" class="grid grid-cols-4 gap-4 max-w-md mx-auto"></div>
+      <button onclick="startMemory()" class="mt-6 px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600">Restart</button>
+      <p id="memory-moves" class="mt-4 text-lg">Moves: 0</p>
+    </div>
+
+    <!-- Math Quiz -->
+    <div id="math" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">🧮 Math Quiz</h2>
+      <p id="math-question" class="text-xl mb-4"></p>
+      <input id="math-answer" type="number" class="px-3 py-2 rounded text-black" placeholder="Your answer">
+      <button onclick="checkMath()" class="ml-2 px-4 py-2 bg-green-500 rounded-lg hover:bg-green-600">Submit</button>
+      <p id="math-feedback" class="mt-4"></p>
+      <p id="math-score" class="mt-2">Score: 0</p>
+    </div>
+
+    <!-- Reaction Game -->
+    <div id="reaction" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">⚡ Reaction Time</h2>
+      <div id="reaction-box" class="w-64 h-64 flex items-center justify-center bg-red-600 rounded-xl cursor-pointer">
+        <p id="reaction-status" class="text-lg">Wait for Green...</p>
+      </div>
+      <p id="reaction-result" class="mt-4 text-xl"></p>
+    </div>
+
+    <!-- Word Scramble -->
+    <div id="scramble" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">🔤 Word Scramble</h2>
+      <p id="scramble-word" class="text-xl mb-4"></p>
+      <input id="scramble-guess" type="text" class="px-3 py-2 rounded text-black" placeholder="Your guess">
+      <button onclick="checkScramble()" class="ml-2 px-4 py-2 bg-yellow-500 rounded-lg hover:bg-yellow-600">Check</button>
+      <p id="scramble-feedback" class="mt-4"></p>
+    </div>
+
+    <!-- Number Sequence Memory -->
+    <div id="sequence" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">🔢 Sequence Memory</h2>
+      <p id="sequence-display" class="text-2xl mb-4"></p>
+      <input id="sequence-input" type="text" class="px-3 py-2 rounded text-black" placeholder="Repeat the sequence">
+      <button onclick="checkSequence()" class="ml-2 px-4 py-2 bg-purple-500 rounded-lg hover:bg-purple-600">Check</button>
+      <p id="sequence-feedback" class="mt-4"></p>
+    </div>
+
+    <!-- Odd One Out -->
+    <div id="odd" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">👀 Odd One Out</h2>
+      <div id="odd-grid" class="grid grid-cols-5 gap-4 max-w-md mx-auto"></div>
+      <p id="odd-feedback" class="mt-4 text-lg"></p>
+    </div>
+
+    <!-- Typing Speed Test -->
+    <div id="typing" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">⌨️ Typing Speed</h2>
+      <p id="typing-sentence" class="mb-4 text-xl"></p>
+      <input id="typing-input" type="text" class="px-3 py-2 w-80 rounded text-black" placeholder="Type here...">
+      <p id="typing-result" class="mt-4 text-lg"></p>
+    </div>
+
+    <!-- Pattern Match -->
+    <div id="pattern" class="hidden text-center">
+      <h2 class="text-2xl font-bold mb-4">🎨 Pattern Match</h2>
+      <p class="mb-2">Memorize the pattern:</p>
+      <div id="pattern-display" class="flex gap-2 justify-center mb-4"></div>
+      <div id="pattern-input" class="flex gap-2 justify-center"></div>
+      <p id="pattern-feedback" class="mt-4 text-lg"></p>
+    </div>
+
+  </div>
+
+  <button onclick="goHome()" class="fixed bottom-6 right-6 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600">🏠 Menu</button>
+
+  <script>
+    // ========== MENU CONTROL ==========
+    function showGame(gameId) {
+      document.querySelectorAll("#games > div").forEach(div => div.classList.add("hidden"));
+      document.getElementById(gameId).classList.remove("hidden");
+      if(gameId === "memory") startMemory();
+      if(gameId === "math") newMathQuestion();
+      if(gameId === "reaction") startReaction();
+      if(gameId === "scramble") newScrambleWord();
+      if(gameId === "sequence") startSequence();
+      if(gameId === "odd") startOddGame();
+      if(gameId === "typing") startTyping();
+      if(gameId === "pattern") startPattern();
+    }
+    function goHome() {
+      document.querySelectorAll("#games > div").forEach(div => div.classList.add("hidden"));
+    }
+
+    // ========== MEMORY ==========
+    const memoryBoard = document.getElementById("memory-board");
+    const memoryMovesEl = document.getElementById("memory-moves");
+    let memorySymbols = ["🍎","🍌","🍇","🍉","🍒","🥝","🍍","🥭","🍊","🍋"];
+    let memoryCards = [], firstCard, secondCard, lockBoard, memoryMoves;
+    function startMemory() {
+      memoryMoves = 0; memoryMovesEl.textContent = "Moves: 0";
+      memoryBoard.innerHTML = "";
+      memoryCards = [...memorySymbols, ...memorySymbols].sort(() => 0.5 - Math.random());
+      memoryCards.forEach(symbol => {
+        const card = document.createElement("div");
+        card.className = "w-20 h-24 bg-gray-700 rounded-xl flex items-center justify-center cursor-pointer text-3xl";
+        card.innerHTML = "❓"; card.dataset.symbol = symbol;
+        card.addEventListener("click", flipMemoryCard);
+        memoryBoard.appendChild(card);
+      });
+      [firstCard, secondCard, lockBoard] = [null, null, false];
+    }
+    function flipMemoryCard(e) {
+      const card = e.target;
+      if(lockBoard || card === firstCard || card.innerHTML !== "❓") return;
+      card.innerHTML = card.dataset.symbol; card.classList.add("bg-green-600");
+      if(!firstCard) { firstCard = card; }
+      else {
+        secondCard = card; memoryMoves++; memoryMovesEl.textContent = `Moves: ${memoryMoves}`;
+        if(firstCard.dataset.symbol === secondCard.dataset.symbol) [firstCard, secondCard] = [null, null];
+        else { lockBoard = true; setTimeout(() => {
+          firstCard.innerHTML = "❓"; secondCard.innerHTML = "❓";
+          firstCard.classList.remove("bg-green-600"); secondCard.classList.remove("bg-green-600");
+          [firstCard, secondCard, lockBoard] = [null, null, false]; }, 1000);
+        }
+      }
+    }
+
+    // ========== MATH QUIZ ==========
+    const mathQ = document.getElementById("math-question");
+    const mathA = document.getElementById("math-answer");
+    const mathF = document.getElementById("math-feedback");
+    const mathS = document.getElementById("math-score");
+    let mathCorrect, mathScore = 0;
+    function newMathQuestion() {
+      const ops = ["+","-","*"];
+      let op = ops[Math.floor(Math.random()*ops.length)];
+      let a = Math.floor(Math.random()*10)+1, b = Math.floor(Math.random()*10)+1;
+      mathCorrect = eval(`${a}${op}${b}`); mathQ.textContent = `${a} ${op} ${b} = ?`;
+      mathA.value = ""; mathF.textContent = "";
+    }
+    function checkMath() {
+      if(parseInt(mathA.value) === mathCorrect) { mathF.textContent = "✅ Correct!"; mathScore++; }
+      else { mathF.textContent = `❌ Wrong! Answer was ${mathCorrect}`; }
+      mathS.textContent = `Score: ${mathScore}`; setTimeout(newMathQuestion, 1000);
+    }
+
+    // ========== REACTION ==========
+    const reactBox = document.getElementById("reaction-box");
+    const reactStatus = document.getElementById("reaction-status");
+    const reactResult = document.getElementById("reaction-result");
+    let reactStart, reactTimeout;
+    function startReaction() {
+      reactBox.style.backgroundColor = "red"; reactStatus.textContent = "Wait for Green..."; reactResult.textContent = "";
+      clearTimeout(reactTimeout);
+      reactTimeout = setTimeout(() => { reactBox.style.backgroundColor = "green"; reactStatus.textContent = "CLICK!"; reactStart = Date.now(); }, Math.random()*3000+1000);
+    }
+    reactBox.addEventListener("click", () => {
+      if(reactBox.style.backgroundColor === "green") {
+        let time = Date.now() - reactStart; reactResult.textContent = `⚡ Your time: ${time} ms`; startReaction();
+      } else { reactStatus.textContent = "Too early! ❌"; clearTimeout(reactTimeout); setTimeout(startReaction, 1000); }
+    });
+
+    // ========== SCRAMBLE ==========
+    const scrambleWords = ["apple","banana","grape","cherry","orange","mango"];
+    const scrambleEl = document.getElementById("scramble-word");
+    const scrambleGuess = document.getElementById("scramble-guess");
+    const scrambleFeedback = document.getElementById("scramble-feedback");
+    let currentWord;
+    function newScrambleWord() {
+      currentWord = scrambleWords[Math.floor(Math.random()*scrambleWords.length)];
+      scrambleEl.textContent = currentWord.split("").sort(()=>Math.random()-0.5).join("");
+      scrambleGuess.value = ""; scrambleFeedback.textContent = "";
+    }
+    function checkScramble() {
+      scrambleFeedback.textContent = (scrambleGuess.value.toLowerCase() === currentWord) ? "✅ Correct!" : `❌ Wrong! The word was ${currentWord}`;
+      setTimeout(newScrambleWord, 1500);
+    }
+
+    // ========== SEQUENCE ==========
+    const seqDisp = document.getElementById("sequence-display");
+    const seqInput = document.getElementById("sequence-input");
+    const seqFeedback = document.getElementById("sequence-feedback");
+    let sequence = [];
+    function startSequence() { sequence = [Math.floor(Math.random()*9)+1]; showSequence(); }
+    function showSequence() { seqDisp.textContent = sequence.join(" "); setTimeout(() => seqDisp.textContent = "?", 1500); seqInput.value=""; seqFeedback.textContent=""; }
+    function checkSequence() {
+      if(seqInput.value === sequence.join(" ")) { seqFeedback.textContent="✅ Correct!"; sequence.push(Math.floor(Math.random()*9)+1); setTimeout(showSequence,1000); }
+      else { seqFeedback.textContent=`❌ Wrong! The sequence was ${sequence.join(" ")}`; setTimeout(startSequence,1500); }
+    }
+
+    // ========== ODD ONE ==========
+    const oddGrid = document.getElementById("odd-grid");
+    const oddFeedback = document.getElementById("odd-feedback");
+    function startOddGame() {
+      oddGrid.innerHTML = ""; oddFeedback.textContent = "";
+      const emojis = ["🍎","🍌","🍇","🍉","🍒","🥝","🍍","🥭"];
+      const symbol = emojis[Math.floor(Math.random()*emojis.length)];
+      const oddSymbol = emojis[Math.floor(Math.random()*emojis.length)];
+      const oddIndex = Math.floor(Math.random()*25);
+      for(let i=0;i<25;i++) {
+        const cell=document.createElement("div");
+        cell.className="w-12 h-12 flex items-center justify-center text-2xl bg-gray-700 rounded-lg cursor-pointer";
+        cell.textContent=(i===oddIndex)?oddSymbol:symbol;
+        cell.addEventListener("click",()=>{ oddFeedback.textContent=(i===oddIndex)?"✅ Correct!":"❌ Try again!"; setTimeout(startOddGame,1000); });
+        oddGrid.appendChild(cell);
+      }
+    }
+
+    // ========== TYPING ==========
+    const typingSentences=["The quick brown fox jumps over the lazy dog.","Memory games boost focus.","Typing speed improves with practice."];
+    const typingSentence=document.getElementById("typing-sentence");
+    const typingInput=document.getElementById("typing-input");
+    const typingResult=document.getElementById("typing-result");
+    let startTime;
+    function startTyping() {
+      typingSentence.textContent=typingSentences[Math.floor(Math.random()*typingSentences.length)];
+      typingInput.value=""; typingResult.textContent=""; startTime=Date.now();
+      typingInput.oninput=()=>{ if(typingInput.value===typingSentence.textContent){ let time=(Date.now()-startTime)/1000; let wpm=Math.round(typingSentence.textContent.split(" ").length/(time/60)); typingResult.textContent=`✅ Done! Speed: ${wpm} WPM`; setTimeout(startTyping,2000);} };
+    }
+
+    // ========== PATTERN ==========
+    const patternColors=["🔴","🟢","🔵","🟡"];
+    const patternDisp=document.getElementById("pattern-display");
+    const patternInp=document.getElementById("pattern-input");
+    const patternFeedback=document.getElementById("pattern-feedback");
+    let pattern=[];
+    function startPattern(){ pattern=[...Array(4)].map(()=>patternColors[Math.floor(Math.random()*patternColors.length)]); patternDisp.textContent=pattern.join(" "); setTimeout(()=>patternDisp.textContent="?",1500); patternInp.innerHTML=""; patternColors.forEach(c=>{ let btn=document.createElement("button"); btn.textContent=c; btn.className="px-3 py-2 bg-gray-700 rounded"; btn.onclick=()=>selectPattern(c); patternInp.appendChild(btn); }); }
+    let userPattern=[]; function selectPattern(c){ userPattern.push(c); if(userPattern.length===pattern.length){ if(userPattern.join("")===pattern.join("")) patternFeedback.textContent="✅ Correct!"; else patternFeedback.textContent=`❌ Wrong! The pattern was ${pattern.join(" ")}`; userPattern=[]; setTimeout(startPattern,1500); } }
+  </script>
+</body>
+</html>
